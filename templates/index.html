@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en-IN">
 
@@ -24,7 +25,7 @@
     <link rel="canonical" href="https://www.bagodih.in/">
 
     
-    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="icon" href="{% static 'images/favicon.png' %}" type="image/png">
 
 
     <meta property="og:title" content="Bagodih Village Portal">
@@ -34,7 +35,7 @@
 
     <meta property="og:type" content="website">
 
-    <meta property="og:image" content="images/og-image.jpg">
+    <meta property="og:image" content="{% static 'images/og-image.jpg' %}">
 
     <meta property="og:url" content="https://www.bagodih.in/">
 
@@ -46,7 +47,7 @@
     <meta name="twitter:description"
         content="Official Digital Village Portal of Bagodih Gram Panchayat">
 
-    <meta name="twitter:image" content="images/og-image.jpg">
+    <meta name="twitter:image" content="{% static 'images/og-image.jpg' %}">
 
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -61,7 +62,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css">
 
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
 </head>
 
@@ -97,8 +98,29 @@
     </nav>
 
     <div class="nav-btn">
-    <a href="login.html" class="login">Log In</a>
-    <a href="register.html" class="register">Register</a>
+
+    {% if user.is_authenticated %}
+
+        <span style="margin-right:15px;font-weight:600;">
+            Welcome, {{ user.username }}
+        </span>
+
+        <a href="{% url 'logout' %}" class="register">
+            Logout
+        </a>
+
+    {% else %}
+
+        <a href="{% url 'login' %}" class="login">
+            Log In
+        </a>
+
+        <a href="{% url 'register' %}" class="register">
+            Register
+        </a>
+
+    {% endif %}
+
 </div>
 
 </header>
@@ -552,7 +574,7 @@
 
         <div class="market-card">
 
-           <img src="wheat.jpg" alt="Rice" loading="lazy">
+           <img src="{% static 'images/wheat.jpg' %}" alt="Rice" loading="lazy">
 
             <div class="market-content">
 
@@ -570,7 +592,7 @@
 
         <div class="market-card">
 
-            <img src="rice.jpg" alt="Rice" loading="lazy">
+            <img src="{% static 'images/rice.jpg' %}" alt="Rice" loading="lazy">
 
             <div class="market-content">
 
@@ -588,7 +610,7 @@
 
         <div class="market-card">
 
-            <img src="veg.jpg" alt="Vegitable" loading="lazy">
+            <img src="{% static 'images/veg.jpg' %}" alt="Vegitable" loading="lazy">
 
             <div class="market-content">
 
@@ -606,7 +628,7 @@
 
         <div class="market-card">
 
-            <img src="furniture.jpg" alt="Furniture" loading="lazy">
+            <img src="{% static 'images/furniture.jpg' %}" alt="Furniture" loading="lazy">
 
             <div class="market-content">
 
@@ -1026,9 +1048,7 @@
     <div class="gallery-container">
 
         <div class="gallery-card">
-
-            <img
-       <img src="gallery1.png" alt="Entrance view of Bagodih Village" loading="lazy">
+       <img src="{% static 'images/gallery1.png' %}" alt="Entrance view of Bagodih Village" loading="lazy">
        <div class="gallery-overlay">
 
                 <h3>Village Entrance</h3>
@@ -1039,7 +1059,7 @@
 
         <div class="gallery-card">
 
-            <img src="gallery2.jpg" alt="Temple" loading="lazy">
+            <img src="{% static 'images/gallery2.jpg' %}" alt="Temple" loading="lazy">
 
             <div class="gallery-overlay">
 
@@ -1051,7 +1071,7 @@
 
         <div class="gallery-card">
 
-            <img src="gallery3.jpg" alt="School" loading="lazy">
+            <img src="{% static 'images/gallery3.jpg' %}" alt="School" loading="lazy">
 
             <div class="gallery-overlay">
 
@@ -1063,7 +1083,7 @@
 
         <div class="gallery-card">
 
-            <img src="gallery4.jpg" alt="Farm" loading="lazy">
+            <img src="{% static 'images/gallery4.jpg' %}" alt="Farm" loading="lazy">
 
             <div class="gallery-overlay">
 
@@ -1075,7 +1095,7 @@
 
         <div class="gallery-card">
 
-            <img src="gallery5.jpg" alt="Festival" loading="lazy">
+            <img src="{% static 'images/gallery5.jpg' %}" alt="Festival" loading="lazy">
 
             <div class="gallery-overlay">
 
@@ -1087,7 +1107,7 @@
 
         <div class="gallery-card">
 
-            <img src="gallery6.jpg" alt="Lake" loading="lazy">
+            <img src="{% static 'images/gallery6.jpg' %}" alt="Lake" loading="lazy">
 
             <div class="gallery-overlay">
 
@@ -1264,7 +1284,7 @@
 
 
 
-<script src="script.js"></script>
+<script src="{% static 'js/script.js' %}"></script>
 
 <footer class="footer">
 
