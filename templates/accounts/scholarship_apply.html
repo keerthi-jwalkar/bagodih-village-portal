@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply for Scholarship</title>
+</head>
+<body>
+    <header>
+        <h1>Application Form</h1>
+        <p>Applying for: <strong>{{ scholarship_title }}</strong></p>
+    </header>
+
+    <form method="post" action="">
+        {% csrf_token %}
+        <!-- A simple form – you can expand this later -->
+        <label for="name">Full Name:</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email:</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="message">Why do you deserve this scholarship?</label><br>
+        <textarea id="message" name="message" rows="5" required></textarea><br><br>
+
+        <input type="submit" value="Submit Application">
+    </form>
+
+    <p><a href="{% url 'accounts:scholarship_list' %}">← Back to Scholarships</a></p>
+</body>
+</html>
