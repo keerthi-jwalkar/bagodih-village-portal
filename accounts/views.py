@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
-
 from django.contrib.auth import authenticate, login, logout
+from django.http import JsonResponse
+from django.http import JsonResponse
+from django.contrib.auth.models import User
 
 
 def login_page(request):
@@ -101,3 +103,51 @@ def logout_page(request):
     messages.success(request, "Logged out successfully.")
 
     return redirect("login")
+
+def check_username(request):
+
+    username = request.GET.get("username", "").strip()
+
+    if not username:
+        return JsonResponse({
+            "available": False,
+            "message": ""
+        })
+
+    exists = User.objects.filter(username=username).exists()
+
+    if exists:
+
+        return JsonResponse({
+            "available": False,
+            "message": " Username already taken"
+        })
+
+    return JsonResponse({
+        "available": True,
+        "message": " Username available"
+    })
+def check_email(request):
+
+    email = request.GET.get("email", "").strip()
+
+    if not email:
+        return JsonResponse({
+            "available": False,
+            "message": ""
+        })
+
+    exists = User.objects.filter(email=email).exists()
+
+    if exists:
+
+        return JsonResponse({
+            "available": False,
+            "message": "❌ Email already registered"
+        })
+
+    return JsonResponse({
+        "available": True,
+        "message": "✅ Email available"
+    })
+    

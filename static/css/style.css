@@ -2202,7 +2202,23 @@ outline-offset:3px;
     }
 
 }
+.message{
+    padding:12px;
+    margin-bottom:15px;
+    border-radius:8px;
+    text-align:center;
+    font-weight:bold;
+}
 
+.success{
+    background:#d4edda;
+    color:#155724;
+}
+
+.error{
+    background:#f8d7da;
+    color:#721c24;
+}
 
 
 

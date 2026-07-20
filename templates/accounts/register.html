@@ -8,6 +8,7 @@
 
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
 </head>
 <body>
 
@@ -25,118 +26,335 @@
     {% endfor %}
 {% endif %}
 
-    <form method="POST">
+    <form method="POST" autocomplete="on">
 
         {% csrf_token %}
 
         <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            required
-        >
-        
-
-        <br><br>
-        <input
     type="text"
-    name="first_name"
-    placeholder="First Name"
+    id="username"
+    name="username"
+    placeholder="Username"
+    autocomplete="username"
     required
 >
 
-<br><br>
+<div id="username-status"></div>
+        
+
+        
+       <input
+    type="text"
+    name="first_name"
+    placeholder="First Name"
+    autocomplete="given-name"
+    required
+>
+
+
 
 <input
     type="text"
     name="last_name"
     placeholder="Last Name"
+    autocomplete="family-name"
     required
 >
 
-<br><br>
+
 
         <input
             type="email"
+            id="email"
             name="email"
             placeholder="Email"
+            autocomplete="email"
             required
         >
+        <div id="email-status"></div>
 
-        <br><br>
+        
 
        <div class="password-box">
-    <input 
-        type="password" 
-        name="password" 
-        id="password"
-        placeholder="Enter Password"
-        required
-    >
+    <input
+    type="password"
+    name="password"
+    id="password"
+    placeholder="Enter Password"
+    autocomplete="new-password"
+    required
+>
 
-    <span class="eye" onclick="togglePassword('password')">
-        👁
-    </span>
+    <span class="eye" onclick="togglePassword('password', this)">
+    <i class="fa-solid fa-eye"></i>
+</span>
 </div>
 
-<br>
+<div id="password-strength"></div>
 
-<label>
-    <input type="checkbox" onclick="showPassword()">
-    Show Password
-</label>
+<!-- Password Rules -->
+<ul id="password-rules">
+    <li id="length-rule"> At least 8 characters</li>
+    <li id="upper-rule"> One uppercase letter</li>
+    <li id="lower-rule"> One lowercase letter</li>
+    <li id="number-rule"> One number</li>
+    <li id="special-rule"> One special character</li>
+</ul>
 
-<br><br>
+     
+      <div class="password-box">
+    <input
+    type="password"
+    name="confirm_password"
+    id="confirm_password"
+    placeholder="Confirm Password"
+    autocomplete="new-password"
+    required
+>
 
-<div class="password-box">
-    <input 
-        type="password" 
-        name="confirm_password" 
-        id="confirm_password"
-        placeholder="Confirm Password"
-        required
-    >
-
-    <span class="eye" onclick="togglePassword('confirm_password')">
-        👁
-    </span>
+    <span class="eye" onclick="togglePassword('confirm_password', this)">
+    <i class="fa-solid fa-eye"></i>
+</span>
 </div>
 
-<br>
+<div id="password-match"></div>
 
-        <button type="submit">
-            Register
-        </button>
+
+
+        <button type="submit" id="register-btn">Register</button>
 
     </form>
 
-    <br>
+    
 
     <a href="{% url 'login' %}">
         Already have an account? Login
     </a>
 
 </div>
+
+
 <script>
 
-function showPassword() {
+// Show / Hide Password
 
-    let password = document.getElementById("password");
-    let confirmPassword = document.getElementById("confirm_password");
+function togglePassword(id, element){
 
-    if (password.type === "password") {
+    const input = document.getElementById(id);
+    const icon = element.querySelector("i");
 
-        password.type = "text";
-        confirmPassword.type = "text";
+    if(input.type === "password"){
 
-    } else {
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
 
-        password.type = "password";
-        confirmPassword.type = "password";
+    }else{
+
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
 
     }
 
 }
+
+function updateRule(element, valid){
+
+    const text = element.textContent
+        .replace("✅", "")
+        .replace("❌", "")
+        .trim();
+
+    if(valid){
+
+        element.innerHTML = "✅ " + text;
+        element.classList.add("valid");
+
+    }else{
+
+        element.innerHTML = "❌ " + text;
+        element.classList.remove("valid");
+
+    }
+
+}   
+// Password Strength
+
+const password = document.getElementById("password");
+const strength = document.getElementById("password-strength");
+const lengthRule = document.getElementById("length-rule");
+const upperRule = document.getElementById("upper-rule");
+const lowerRule = document.getElementById("lower-rule");
+const numberRule = document.getElementById("number-rule");
+const specialRule = document.getElementById("special-rule");
+const passwordRules = document.getElementById("password-rules");
+
+
+password.addEventListener("input", function(){
+    if(password.value.length > 0){
+
+    passwordRules.style.display = "block";
+
+}else{
+
+    passwordRules.style.display = "none";
+
+}
+
+    const value = password.value;
+
+   updateRule(lengthRule, value.length >= 8);
+   updateRule(upperRule, /[A-Z]/.test(value));
+   updateRule(lowerRule, /[a-z]/.test(value));
+   updateRule(numberRule, /[0-9]/.test(value));
+   updateRule(specialRule, /[^A-Za-z0-9]/.test(value));
+
+    let score = 0;
+
+    if(value.length >= 8) score++;
+    if(/[A-Z]/.test(value)) score++;
+    if(/[a-z]/.test(value)) score++;
+    if(/[0-9]/.test(value)) score++;
+    if(/[^A-Za-z0-9]/.test(value)) score++;
+
+    if(value.length === 0){
+
+        strength.textContent = "";
+
+    }
+    else if(score <= 2){
+
+        strength.textContent = "🔴 Weak Password";
+        strength.style.color = "#dc3545";
+
+    }
+    else if(score <= 4){
+
+        strength.textContent = "🟡 Medium Password";
+        strength.style.color = "#ff9800";
+
+    }
+    else{
+
+        strength.textContent = "🟢 Strong Password";
+        strength.style.color = "#28a745";
+
+    }
+
+});
+
+// Password Match
+
+const confirmPassword = document.getElementById("confirm_password");
+const matchMessage = document.getElementById("password-match");
+
+confirmPassword.addEventListener("input", function(){
+
+    if(confirmPassword.value === ""){
+
+        matchMessage.textContent = "";
+        return;
+
+    }
+
+    if(password.value === confirmPassword.value){
+
+        matchMessage.textContent = " Passwords match";
+        matchMessage.style.color = "#28a745";
+
+    }else{
+
+        matchMessage.textContent = " Passwords do not match";
+        matchMessage.style.color = "#dc3545";
+
+    }
+
+});
+
+// Loading Button
+
+const form = document.querySelector("form");
+const registerButton = document.getElementById("register-btn");
+
+form.addEventListener("submit", function(){
+
+    registerButton.innerHTML = "Creating Account...";
+    registerButton.disabled = true;
+
+});
+
+// Username Availability Check
+
+const usernameInput = document.getElementById("username");
+const usernameMessage = document.getElementById("username-status");
+
+usernameInput.addEventListener("input", function(){
+
+    const username = usernameInput.value.trim();
+
+    if(username.length === 0){
+
+        usernameMessage.innerHTML = "";
+        return;
+
+    }
+
+    fetch(`/accounts/check-username/?username=${username}`)
+    .then(response => response.json())
+    .then(data => {
+
+        usernameMessage.innerHTML = data.message;
+
+        if(data.available){
+
+            usernameMessage.style.color = "#28a745";
+
+        }else{
+
+            usernameMessage.style.color = "#dc3545";
+
+        }
+
+    });
+
+});
+
+// Live Email Check
+
+const emailInput = document.getElementById("email");
+const emailStatus = document.getElementById("email-status");
+
+emailInput.addEventListener("input", function(){
+
+    const email = emailInput.value.trim();
+
+    if(email.length === 0){
+
+        emailStatus.innerHTML = "";
+        return;
+
+    }
+
+    fetch(`/accounts/check-email/?email=${email}`)
+    .then(response => response.json())
+    .then(data => {
+
+        emailStatus.innerHTML = data.message;
+
+        if(data.available){
+
+            emailStatus.style.color = "#28a745";
+
+        }else{
+
+            emailStatus.style.color = "#dc3545";
+
+        }
+
+    });
+
+});
 
 </script>
 

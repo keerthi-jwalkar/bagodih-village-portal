@@ -1,19 +1,179 @@
 
 
-.message{
-    padding:12px;
-    margin-bottom:15px;
-    border-radius:8px;
+body{
+    margin:0;
+    padding:0;
+    font-family:'Poppins',sans-serif;
+    background:linear-gradient(135deg,#2f6b4d,#6dbb75);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* Register Card */
+
+.container{
+    width:100%;
+    max-width:420px;
+    background:#fff;
+    padding:40px;
+    border-radius:15px;
+    box-shadow:0 15px 40px rgba(0,0,0,.2);
+}
+
+/* Heading */
+
+.container h2{
     text-align:center;
-    font-weight:bold;
+    color:#2f6b4d;
+    margin-bottom:30px;
 }
 
-.success{
-    background:#d4edda;
-    color:#155724;
+/* Input Fields */
+
+.container input{
+    width:100%;
+    padding:14px;
+    margin-bottom:18px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    font-size:16px;
+    box-sizing:border-box;
+    transition:.3s;
 }
 
-.error{
-    background:#f8d7da;
-    color:#721c24;
+.container input:focus{
+    outline:none;
+    border-color:#2f6b4d;
 }
+
+/* Password Box */
+
+.password-box{
+    position:relative;
+}
+
+.password-box input{
+    margin-bottom:0;
+    padding-right:60px;
+}
+
+/* Eye Icon */
+
+.eye{
+    position:absolute;
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+    font-size:18px;
+    user-select:none;
+    color:#666;
+}
+
+.eye:hover{
+    color:#2f6b4d;
+}
+
+.eye i{
+    font-size:18px;
+}
+
+.password-box{
+    position:relative;
+    margin-bottom:18px;
+}
+
+/* Register Button */
+
+.container button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:8px;
+    background:#2f6b4d;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.container button:hover{
+    background:#24543c;
+}
+
+/* Login Link */
+
+.container a{
+    display:block;
+    margin-top:18px;
+    text-align:center;
+    text-decoration:none;
+    color:#2f6b4d;
+    font-weight:500;
+}
+
+.container a:hover{
+    text-decoration:underline;
+}
+
+/* Mobile */
+
+@media(max-width:480px){
+
+    .container{
+        width:90%;
+        padding:25px;
+    }
+} 
+
+#password-strength{
+    margin-top:-8px;
+    margin-bottom:18px;
+    font-size:14px;
+    font-weight:500;
+}
+/* Password Match */
+
+#password-match{
+    margin-top:-8px;
+    margin-bottom:18px;
+    font-size:14px;
+    font-weight:500;
+}
+
+.container button:disabled{
+    background:#7a7a7a;
+    cursor:not-allowed;
+}
+
+#password-rules{
+    list-style:none;
+    padding:0;
+    margin:10px 0 20px;
+    font-size:14px;
+    margin-bottom:15px;
+    display:none;
+}
+
+#password-rules li{
+    margin:6px 0;
+    color:#dc3545;
+    list-style:none;
+    font-size:14px;
+}
+
+#password-rules .valid{
+    color:#28a745;
+}
+
+#username-status{
+    margin-top:6px;
+    margin-bottom:15px;
+    font-size:14px;
+    font-weight:500;
+}
+
+
+
