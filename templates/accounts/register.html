@@ -118,16 +118,22 @@
 </div>
 
 <div id="password-match"></div>
+<div id="form-error"></div>
 
 
 
-        <button type="submit" id="register-btn">Register</button>
+        <button type="submit" id="register-btn">
+    <span id="btn-text">Register</span>
+    <span id="spinner" style="display:none;">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+    </span>
+</button>
 
     </form>
 
     
 
-    <a href="{% url 'login' %}">
+    <a href="{% url 'accounts:login' %}">
         Already have an account? Login
     </a>
 
@@ -248,6 +254,7 @@ password.addEventListener("input", function(){
 
 const confirmPassword = document.getElementById("confirm_password");
 const matchMessage = document.getElementById("password-match");
+const formError = document.getElementById("form-error");
 
 confirmPassword.addEventListener("input", function(){
 
@@ -272,15 +279,68 @@ confirmPassword.addEventListener("input", function(){
 
 });
 
-// Loading Button
+// Loading Button with Validation
 
 const form = document.querySelector("form");
 const registerButton = document.getElementById("register-btn");
+const spinner = document.getElementById("spinner");
+const btnText = document.getElementById("btn-text");
 
-form.addEventListener("submit", function(){
 
-    registerButton.innerHTML = "Creating Account...";
+form.addEventListener("submit", function(event){
+    
+    formError.textContent = "";
+
+
+    const passwordValue = password.value;
+    const confirmPasswordValue = confirmPassword.value;
+
+
+    // Password Match Check
+
+    if(passwordValue !== confirmPasswordValue){
+
+        event.preventDefault();
+
+        formError.textContent = " Passwords do not match!";
+formError.style.color = "#dc3545";
+
+        return;
+
+    }
+
+
+    // Password Rules Check
+
+    const strongPassword =
+        passwordValue.length >= 8 &&
+        /[A-Z]/.test(passwordValue) &&
+        /[a-z]/.test(passwordValue) &&
+        /[0-9]/.test(passwordValue) &&
+        /[^A-Za-z0-9]/.test(passwordValue);
+
+
+    if(!strongPassword){
+
+        event.preventDefault();
+
+        formError.textContent = " Please create a strong password!";
+formError.style.color = "#dc3545";
+
+
+        return;
+
+    }
+
+
+    // Everything OK → Show Spinner
+
     registerButton.disabled = true;
+
+    btnText.innerHTML = "Creating Account...";
+
+    spinner.style.display = "inline-block";
+
 
 });
 

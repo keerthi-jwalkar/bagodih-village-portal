@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
-from django.http import JsonResponse
-from django.contrib.auth.models import User
 
 
 def login_page(request):
@@ -14,23 +12,33 @@ def login_page(request):
         username = request.POST.get("username")
         password = request.POST.get("password")
 
+
         user = authenticate(
             request,
             username=username,
             password=password
         )
 
+
         if user is not None:
 
             login(request, user)
 
+            messages.success(
+                request,
+                f"Welcome {user.username}!"
+            )
+
             return redirect("/")
+
 
         else:
 
-            messages.error(request, "Invalid Username or Password")
+            messages.error(
+                request,
+                "❌ Invalid Username or Password"
+            )
 
-            return redirect("login")
 
     return render(request, "accounts/login.html")
 
@@ -49,33 +57,33 @@ def register_page(request):
         # Password Match
         if password != confirm_password:
             messages.error(request, "Passwords do not match.")
-            return redirect("register")
+            return redirect("accounts:register")
         # Password Length
         if len(password) < 6:
          messages.error(request, "Password must be at least 6 characters.")
-         return redirect("register")
+         return redirect("accounts:register")
         #uppercase
         if not any(char.isupper() for char in password):
          messages.error(request, "Password must contain at least one uppercase letter.")
-         return redirect("register")
+         return redirect("accounts:register")
         #lowercase
         if not any(char.islower() for char in password):
          messages.error(request, "Password must contain at least one lowercase letter.")
-         return redirect("register")
+         return redirect("accounts:register")
         #number
         if not any(char.isdigit() for char in password):
          messages.error(request, "Password must contain at least one number.")
-         return redirect("register")
-        
+         return redirect("accounts:register")
+
         # Username Exists
         if User.objects.filter(username=username).exists():
             messages.error(request, "Username already exists.")
-            return redirect("register")
+            return redirect("accounts:register")
 
         # Email Exists
         if User.objects.filter(email=email).exists():
             messages.error(request, "Email already exists.")
-            return redirect("register")
+            return redirect("accounts:register")
 
         # Create User
         print("Creating user...")
@@ -90,7 +98,7 @@ def register_page(request):
         print("User created successfully")
 
         messages.success(request, "Account created successfully. Please login.")
-        return redirect("login")
+        return redirect("accounts:login")
 
     return render(request, "accounts/register.html")
 
@@ -102,7 +110,7 @@ def logout_page(request):
 
     messages.success(request, "Logged out successfully.")
 
-    return redirect("login")
+    return redirect("accounts:login")
 
 def check_username(request):
 

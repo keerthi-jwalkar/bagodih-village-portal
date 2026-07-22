@@ -69,3 +69,32 @@ body{
 .container p{
     text-align:center;
 }
+
+.password-box{
+    position:relative;
+}
+
+
+.eye{
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    cursor:pointer;
+}
+
+
+#login-error{
+
+    margin-top:10px;
+    color:#dc3545;
+    font-size:14px;
+
+}
+
+
+#login-spinner{
+
+    margin-left:8px;
+
+}

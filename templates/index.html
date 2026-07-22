@@ -86,40 +86,98 @@
 
     <nav>
 
-        <a href="#emergency">Emergency</a>
-        <a href="#schemes">Schemes</a>
-        <a href="#marketplace">Marketplace</a>
-        <a href="#jobs">Jobs</a>
-        <a href="#education-corner">Education</a>
-        <a href="#business">Directory</a>
-        
-        
+<a href="#emergency">Emergency</a>
+<a href="#schemes">Schemes</a>
+<a href="#marketplace">Marketplace</a>
+<a href="#jobs">Jobs</a>
+<a href="#education-corner">Education</a>
+<a href="#business">Directory</a>
 
-    </nav>
+
+<li class="nav-item d-flex align-items-center me-3">
+
+    <button id="themeToggle" class="theme-btn">
+
+        <i class="fa-solid fa-moon"></i>
+
+    </button>
+
+</li>
+
+
+{% if user.is_authenticated %}
+
+<li>
+    <span class="welcome-user">
+        Welcome {{ user.username }}
+    </span>
+</li>
+
+<li>
+    <a href="{% url 'accounts:logout' %}">
+        Logout
+    </a>
+</li>
+
+
+{% else %}
+
+
+<li>
+    <a href="{% url 'accounts:login' %}">
+        Login
+    </a>
+</li>
+
+
+<li>
+    <a href="{% url 'accounts:register' %}">
+        Register
+    </a>
+</li>
+
+
+{% endif %}
+
+
+</nav>
 
     <div class="nav-btn">
 
     {% if user.is_authenticated %}
 
-        <span style="margin-right:15px;font-weight:600;">
-            Welcome, {{ user.username }}
-        </span>
+<li>
+    <span>
+        Welcome {{ user.username }}
+    </span>
+</li>
 
-        <a href="{% url 'logout' %}" class="register">
-            Logout
-        </a>
 
-    {% else %}
+<li>
+    <a href="{% url 'accounts:logout' %}">
+        Logout
+    </a>
+</li>
 
-        <a href="{% url 'login' %}" class="login">
-            Log In
-        </a>
 
-        <a href="{% url 'register' %}" class="register">
-            Register
-        </a>
+{% else %}
 
-    {% endif %}
+
+<li>
+    <a href="{% url 'accounts:login' %}">
+        Login
+    </a>
+</li>
+
+
+<li>
+    <a href="{% url 'accounts:register' %}">
+        Register
+    </a>
+</li>
+
+
+{% endif %}
 
 </div>
 
@@ -897,7 +955,9 @@
                 Find latest scholarship schemes for school and college students.
             </p>
 
-            <a href="#">Explore →</a>
+            <a href="{% url 'scholarship:scholarship_list' %}">
+    Explore →
+</a>
 
         </div>
 
@@ -911,7 +971,7 @@
                 Career counselling and competitive exam preparation resources.
             </p>
 
-            <a href="#">Explore →</a>
+            <a href="{% url 'scholarship:scholarship_list' %}">Apply Now →</a>
 
         </div>
 
