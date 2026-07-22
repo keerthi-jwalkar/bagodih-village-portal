@@ -36,7 +36,7 @@ def login_page(request):
 
             messages.error(
                 request,
-                "❌ Invalid Username or Password"
+                " Invalid Username or Password"
             )
 
 

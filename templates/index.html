@@ -103,79 +103,30 @@
     </button>
 
 </li>
+</nav>
 
+<div class="nav-btn">
 
 {% if user.is_authenticated %}
 
-<li>
-    <span class="welcome-user">
-        Welcome {{ user.username }}
-    </span>
-</li>
+<span class="welcome-user">
+    Welcome {{ user.username }} ,
+</span>
 
-<li>
-    <a href="{% url 'accounts:logout' %}">
-        Logout
-    </a>
-</li>
+<a href="{% url 'accounts:logout' %}" class="register-btn">
+    Logout
+</a>
 
 
 {% else %}
 
+<a href="{% url 'accounts:login' %}" class="nav-login">
+    Login
+</a>
 
-<li>
-    <a href="{% url 'accounts:login' %}">
-        Login
-    </a>
-</li>
-
-
-<li>
-    <a href="{% url 'accounts:register' %}">
-        Register
-    </a>
-</li>
-
-
-{% endif %}
-
-
-</nav>
-
-    <div class="nav-btn">
-
-    {% if user.is_authenticated %}
-
-<li>
-    <span>
-        Welcome {{ user.username }}
-    </span>
-</li>
-
-
-<li>
-    <a href="{% url 'accounts:logout' %}">
-        Logout
-    </a>
-</li>
-
-
-{% else %}
-
-
-<li>
-    <a href="{% url 'accounts:login' %}">
-        Login
-    </a>
-</li>
-
-
-<li>
-    <a href="{% url 'accounts:register' %}">
-        Register
-    </a>
-</li>
-
+<a href="{% url 'accounts:register' %}" class="register-btn">
+    Register
+</a>
 
 {% endif %}
 
