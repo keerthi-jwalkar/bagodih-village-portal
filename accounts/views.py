@@ -5,6 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
 
+
 def login_page(request):
 
     if request.method == "POST":
@@ -158,4 +159,10 @@ def check_email(request):
         "available": True,
         "message": "✅ Email available"
     })
-    
+    from django.contrib.auth.decorators import login_required
+def profile(request):
+    return render(request, "accounts/profile.html")
+
+
+
+   

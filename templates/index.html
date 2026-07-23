@@ -113,6 +113,10 @@
     Welcome {{ user.username }} ,
 </span>
 
+{% if user.is_superuser %}
+    <a href="/admin/">Admin Panel</a>
+{% endif %}
+
 <a href="{% url 'accounts:logout' %}" class="register-btn">
     Logout
 </a>
@@ -203,9 +207,15 @@
             <div class="icon green"><i class="fa-solid fa-exclamation"></i></div>
             
 
-            <h3>Submit Complaint</h3>
+            <h3>
+                <a href="{% url 'complaints:submit_complaint' %}">
+Submit Complaint
+</a>
+</h3>
 
-            <p>Road, water, light issues</p>
+<p>
+Road, Water, Electricity & Other Issues
+</p>
 
         </div>
 
@@ -348,7 +358,9 @@
 
             </div>
             <div class="file-complaint">
-                <a href="#">&#43 File a Complaint →</a>
+                <a href="{% url 'complaints:submit_complaint' %}">
++ File a Complaint →
+</a>
             </div>
 
         </div>

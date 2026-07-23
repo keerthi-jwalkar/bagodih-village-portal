@@ -1,0 +1,395 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Submit Complaint | Gram Seva Portal</title>
+    
+
+<link rel="icon" type="image/png" href="{% static 'images/favicon.png' %}">
+
+    <link rel="stylesheet" href="{% static 'css/complaint.css' %}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+         
+    <link rel="stylesheet" href="{% static 'css/complaint.css' %}">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/complaints.css' %}">
+
+</head>
+
+<body>
+
+    <!-- Header -->
+
+     <body>
+    <a class="skip-link" href="#main-content">
+    Skip to Main Content
+</a>
+
+    <header>
+
+    <a href="index.html" class="logo">
+
+        <i class="fa-solid fa-house home-icon"></i>
+
+        <div class="logo-text">
+            <h2>BAGODIH</h2>
+            <p>Hamara Gaon, Hamari Pehchan</p>
+        </div>
+
+    </a>
+
+    <nav>
+
+<a href="#emergency">Emergency</a>
+<a href="#schemes">Schemes</a>
+<a href="#marketplace">Marketplace</a>
+<a href="#jobs">Jobs</a>
+<a href="#education-corner">Education</a>
+<a href="#business">Directory</a>
+
+
+<li class="nav-item d-flex align-items-center me-3">
+
+    <button id="themeToggle" class="theme-btn">
+
+        <i class="fa-solid fa-moon"></i>
+
+    </button>
+
+</li>
+</nav>
+
+<div class="nav-btn">
+
+{% if user.is_authenticated %}
+
+<span class="welcome-user">
+    Welcome {{ user.username }} ,
+</span>
+
+<a href="{% url 'accounts:logout' %}" class="register-btn">
+    Logout
+</a>
+
+
+{% else %}
+
+<a href="{% url 'accounts:login' %}" class="nav-login">
+    Login
+</a>
+
+<a href="{% url 'accounts:register' %}" class="register-btn">
+    Register
+</a>
+
+{% endif %}
+
+</div>
+
+</header>
+
+
+    <!-- Hero Section -->
+
+    <section class="hero">
+
+        <h1>Submit Your Complaint</h1>
+
+        <p>
+
+            Facing issues related to roads, electricity, water supply,
+
+            cleanliness, or any other public service?
+
+            Fill out the form below and help us improve your village.
+
+        </p>
+
+    </section>
+
+    <!-- Complaint Form -->
+
+    <section class="complaint-container">
+
+        <div class="form-card">
+
+            <h2>Complaint Form</h2>
+
+            <p class="subtitle">
+
+                Please provide accurate information while submitting your complaint.
+
+            </p>
+
+           <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+                <div class="row">
+
+                    <div class="input-box">
+
+                        <label>Full Name</label>
+
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Enter your full name"
+                            required>
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <label>Mobile Number</label>
+
+                        <input
+                            type="text"
+                            name="mobile"
+                            maxlength="10"
+                            placeholder="Enter mobile number"
+                            required>
+
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="input-box">
+
+                        <label>Ward Number</label>
+
+                        <input
+                            type="text"
+                            name="ward"
+                            placeholder="Enter ward number"
+                            required>
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <label>Complaint Category</label>
+
+                        <select
+                            name="category"
+                            required>
+
+                            <option value="">Select Category</option>
+
+                            <option value="Road">Road Issue</option>
+
+                            <option value="Water">Water Supply</option>
+
+                            <option value="Electricity">Electricity</option>
+
+                            <option value="Cleanliness">Cleanliness</option>
+
+                            <option value="Other">Other</option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+                                <div class="input-box">
+
+                    <label>Complaint Description</label>
+
+                    <textarea
+                        name="description"
+                        rows="6"
+                        placeholder="Describe your complaint in detail..."
+                        required></textarea>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="input-box">
+
+                        <label>Upload Supporting Image</label>
+
+                        <input
+                            type="file"
+                            name="image"
+                            id="imageInput"
+                            accept="image/*">
+
+                    </div>
+
+                    <div class="input-box">
+
+                        <label>Current Location</label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            id="location"
+                            placeholder="Enter your location">
+
+                    </div>
+
+                </div>
+
+                <div class="preview-box">
+
+                    <img
+                        id="previewImage"
+                        src=""
+                        alt="Image Preview">
+
+                </div>
+
+                <div class="button-group">
+
+                    <button
+                        type="button"
+                        id="locationBtn">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        Use My Location
+
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="submit-btn">
+
+                        <i class="fa-solid fa-paper-plane"></i>
+
+                        Submit Complaint
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </section>
+<script src="{% static 'css/complaint.js' %}"></script>
+
+<footer class="footer">
+
+    <div class="footer-container">
+
+        <div class="footer-box">
+
+            <h2>BAGODIH</h2>
+
+            <p>
+                Hamara Gaon, Hamari Pehchan. <br>
+                Digital Village Portal connecting villagers,<br>
+                Panchayat and local businesses.
+            </p>
+
+            <div class="footer-social">
+
+                <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+
+                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+
+                <a href="#"><i class="fa-brands fa-whatsapp"></i></a>
+
+                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-box">
+
+            <h3>Quick Links</h3>
+
+            <ul>
+
+                <li><a href="#">Home</a></li>
+
+                <li><a href="#">Schemes</a></li>
+
+                <li><a href="#">Complaints</a></li>
+
+                <li><a href="#">Jobs</a></li>
+
+                <li><a href="#">Marketplace</a></li>
+
+            </ul>
+
+        </div>
+
+
+        <div class="footer-box">
+
+            <h3>Useful Links</h3>
+
+            <ul>
+
+                <a href="#schemes">Schemes</a>
+                <a href="#jobs">Jobs</a>
+                <a href="#business">Directory</a>
+                <a href="#marketplace">Marketplace</a>
+                <a href="#emergency">Emergency</a>
+
+            </ul>
+
+        </div>
+
+
+        <div class="footer-box">
+
+            <h3>Emergency</h3>
+
+            <p><strong>Police:</strong> 100</p>
+
+            <p><strong>Ambulance:</strong> 108</p>
+
+            <p><strong>Fire:</strong> 101</p>
+
+            <p><strong>Hospital:</strong> +91 9876543210</p>
+
+        </div>
+
+    </div>
+
+
+    <div class="footer-bottom">
+
+        <p>
+
+            © 2026 Bagodih Village Portal |
+            Designed & Developed by Sonu & Keerthi ❤️
+
+        </p>
+
+    </div>
+
+</footer>
+
+
+<button id="topBtn">
+
+    <i class="fa-solid fa-arrow-up"></i>
+
+</button>
+
+</body>
+
+</html>
