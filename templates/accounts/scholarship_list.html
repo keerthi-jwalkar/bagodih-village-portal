@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarships - Education Corner</title>
+    <!-- Add your CSS/static files here -->
+</head>
+<body>
+    <header>
+        <h1>Available Scholarships</h1>
+        <p>Find the latest schemes for school and college students.</p>
+    </header>
+
+    <section>
+        {% for scholarship in scholarships %}
+<div class="scholarship-card">
+
+    <h2>{{ scholarship.title }}</h2>
+
+    <p>{{ scholarship.description }}</p>
+
+    <p>
+        <strong>Deadline:</strong>
+        {{ scholarship.deadline }}
+    </p>
+
+    <p>
+        <strong>Amount:</strong>
+        {{ scholarship.amount }}
+    </p>
+
+    <a href="{% url 'scholarship:scholarship_apply' scholarship.id %}">
+        <button>Apply Now →</button>
+    </a>
+
+</div>
+{% empty %}
+<p>No scholarships available.</p>
+{% endfor %}
+    </section>
+</body>
+</html>

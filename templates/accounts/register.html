@@ -1,0 +1,422 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+    <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Create Account</h2>
+
+    {% if messages %}
+    {% for message in messages %}
+
+        <div class="message {{ message.tags }}">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+{% endif %}
+
+    <form method="POST" autocomplete="on">
+
+        {% csrf_token %}
+
+        <input
+    type="text"
+    id="username"
+    name="username"
+    placeholder="Username"
+    autocomplete="username"
+    required
+>
+
+<div id="username-status"></div>
+        
+
+        
+       <input
+    type="text"
+    name="first_name"
+    placeholder="First Name"
+    autocomplete="given-name"
+    required
+>
+
+
+
+<input
+    type="text"
+    name="last_name"
+    placeholder="Last Name"
+    autocomplete="family-name"
+    required
+>
+
+
+
+        <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Email"
+            autocomplete="email"
+            required
+        >
+        <div id="email-status"></div>
+
+        
+
+       <div class="password-box">
+    <input
+    type="password"
+    name="password"
+    id="password"
+    placeholder="Enter Password"
+    autocomplete="new-password"
+    required
+>
+
+    <span class="eye" onclick="togglePassword('password', this)">
+    <i class="fa-solid fa-eye"></i>
+</span>
+</div>
+
+<div id="password-strength"></div>
+
+<!-- Password Rules -->
+<ul id="password-rules">
+    <li id="length-rule"> At least 8 characters</li>
+    <li id="upper-rule"> One uppercase letter</li>
+    <li id="lower-rule"> One lowercase letter</li>
+    <li id="number-rule"> One number</li>
+    <li id="special-rule"> One special character</li>
+</ul>
+
+     
+      <div class="password-box">
+    <input
+    type="password"
+    name="confirm_password"
+    id="confirm_password"
+    placeholder="Confirm Password"
+    autocomplete="new-password"
+    required
+>
+
+    <span class="eye" onclick="togglePassword('confirm_password', this)">
+    <i class="fa-solid fa-eye"></i>
+</span>
+</div>
+
+<div id="password-match"></div>
+<div id="form-error"></div>
+
+
+
+        <button type="submit" id="register-btn">
+    <span id="btn-text">Register</span>
+    <span id="spinner" style="display:none;">
+        <i class="fa-solid fa-spinner fa-spin"></i>
+    </span>
+</button>
+
+    </form>
+
+    
+
+    <a href="{% url 'accounts:login' %}">
+        Already have an account? Login
+    </a>
+
+</div>
+
+
+<script>
+
+// Show / Hide Password
+
+function togglePassword(id, element){
+
+    const input = document.getElementById(id);
+    const icon = element.querySelector("i");
+
+    if(input.type === "password"){
+
+        input.type = "text";
+        icon.classList.remove("fa-eye");
+        icon.classList.add("fa-eye-slash");
+
+    }else{
+
+        input.type = "password";
+        icon.classList.remove("fa-eye-slash");
+        icon.classList.add("fa-eye");
+
+    }
+
+}
+
+function updateRule(element, valid){
+
+    const text = element.textContent
+        .replace("✅", "")
+        .replace("❌", "")
+        .trim();
+
+    if(valid){
+
+        element.innerHTML = "✅ " + text;
+        element.classList.add("valid");
+
+    }else{
+
+        element.innerHTML = "❌ " + text;
+        element.classList.remove("valid");
+
+    }
+
+}   
+// Password Strength
+
+const password = document.getElementById("password");
+const strength = document.getElementById("password-strength");
+const lengthRule = document.getElementById("length-rule");
+const upperRule = document.getElementById("upper-rule");
+const lowerRule = document.getElementById("lower-rule");
+const numberRule = document.getElementById("number-rule");
+const specialRule = document.getElementById("special-rule");
+const passwordRules = document.getElementById("password-rules");
+
+
+password.addEventListener("input", function(){
+    if(password.value.length > 0){
+
+    passwordRules.style.display = "block";
+
+}else{
+
+    passwordRules.style.display = "none";
+
+}
+
+    const value = password.value;
+
+   updateRule(lengthRule, value.length >= 8);
+   updateRule(upperRule, /[A-Z]/.test(value));
+   updateRule(lowerRule, /[a-z]/.test(value));
+   updateRule(numberRule, /[0-9]/.test(value));
+   updateRule(specialRule, /[^A-Za-z0-9]/.test(value));
+
+    let score = 0;
+
+    if(value.length >= 8) score++;
+    if(/[A-Z]/.test(value)) score++;
+    if(/[a-z]/.test(value)) score++;
+    if(/[0-9]/.test(value)) score++;
+    if(/[^A-Za-z0-9]/.test(value)) score++;
+
+    if(value.length === 0){
+
+        strength.textContent = "";
+
+    }
+    else if(score <= 2){
+
+        strength.textContent = "🔴 Weak Password";
+        strength.style.color = "#dc3545";
+
+    }
+    else if(score <= 4){
+
+        strength.textContent = "🟡 Medium Password";
+        strength.style.color = "#ff9800";
+
+    }
+    else{
+
+        strength.textContent = "🟢 Strong Password";
+        strength.style.color = "#28a745";
+
+    }
+
+});
+
+// Password Match
+
+const confirmPassword = document.getElementById("confirm_password");
+const matchMessage = document.getElementById("password-match");
+const formError = document.getElementById("form-error");
+
+confirmPassword.addEventListener("input", function(){
+
+    if(confirmPassword.value === ""){
+
+        matchMessage.textContent = "";
+        return;
+
+    }
+
+    if(password.value === confirmPassword.value){
+
+        matchMessage.textContent = " Passwords match";
+        matchMessage.style.color = "#28a745";
+
+    }else{
+
+        matchMessage.textContent = " Passwords do not match";
+        matchMessage.style.color = "#dc3545";
+
+    }
+
+});
+
+// Loading Button with Validation
+
+const form = document.querySelector("form");
+const registerButton = document.getElementById("register-btn");
+const spinner = document.getElementById("spinner");
+const btnText = document.getElementById("btn-text");
+
+
+form.addEventListener("submit", function(event){
+    
+    formError.textContent = "";
+
+
+    const passwordValue = password.value;
+    const confirmPasswordValue = confirmPassword.value;
+
+
+    // Password Match Check
+
+    if(passwordValue !== confirmPasswordValue){
+
+        event.preventDefault();
+
+        formError.textContent = " Passwords do not match!";
+formError.style.color = "#dc3545";
+
+        return;
+
+    }
+
+
+    // Password Rules Check
+
+    const strongPassword =
+        passwordValue.length >= 8 &&
+        /[A-Z]/.test(passwordValue) &&
+        /[a-z]/.test(passwordValue) &&
+        /[0-9]/.test(passwordValue) &&
+        /[^A-Za-z0-9]/.test(passwordValue);
+
+
+    if(!strongPassword){
+
+        event.preventDefault();
+
+        formError.textContent = " Please create a strong password!";
+formError.style.color = "#dc3545";
+
+
+        return;
+
+    }
+
+
+    // Everything OK → Show Spinner
+
+    registerButton.disabled = true;
+
+    btnText.innerHTML = "Creating Account...";
+
+    spinner.style.display = "inline-block";
+
+
+});
+
+// Username Availability Check
+
+const usernameInput = document.getElementById("username");
+const usernameMessage = document.getElementById("username-status");
+
+usernameInput.addEventListener("input", function(){
+
+    const username = usernameInput.value.trim();
+
+    if(username.length === 0){
+
+        usernameMessage.innerHTML = "";
+        return;
+
+    }
+
+    fetch(`/accounts/check-username/?username=${username}`)
+    .then(response => response.json())
+    .then(data => {
+
+        usernameMessage.innerHTML = data.message;
+
+        if(data.available){
+
+            usernameMessage.style.color = "#28a745";
+
+        }else{
+
+            usernameMessage.style.color = "#dc3545";
+
+        }
+
+    });
+
+});
+
+// Live Email Check
+
+const emailInput = document.getElementById("email");
+const emailStatus = document.getElementById("email-status");
+
+emailInput.addEventListener("input", function(){
+
+    const email = emailInput.value.trim();
+
+    if(email.length === 0){
+
+        emailStatus.innerHTML = "";
+        return;
+
+    }
+
+    fetch(`/accounts/check-email/?email=${email}`)
+    .then(response => response.json())
+    .then(data => {
+
+        emailStatus.innerHTML = data.message;
+
+        if(data.available){
+
+            emailStatus.style.color = "#28a745";
+
+        }else{
+
+            emailStatus.style.color = "#dc3545";
+
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
