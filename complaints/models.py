@@ -30,6 +30,7 @@ class Complaint(models.Model):
 
     description = models.TextField()
 
+    # Purana image field (abhi ke liye rehne do)
     image = models.ImageField(
         upload_to="complaints/",
         blank=True,
@@ -53,3 +54,20 @@ class Complaint(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.category}"
+
+
+# Multiple Images Model
+class ComplaintImage(models.Model):
+
+    complaint = models.ForeignKey(
+        Complaint,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+
+    image = models.ImageField(
+        upload_to="complaints/",
+    )
+
+    def __str__(self):
+        return f"Image {self.id} - {self.complaint.name}"

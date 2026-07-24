@@ -32,10 +32,7 @@
 
 <body>
 
-    <!-- Header -->
-
-     <body>
-    <a class="skip-link" href="#main-content">
+<a class="skip-link" href="#main-content">
     Skip to Main Content
 </a>
 
@@ -135,8 +132,9 @@
 
             </p>
 
-           <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+           <form id="complaintForm" method="POST" enctype="multipart/form-data">
+    
+            {% csrf_token %}
 
                 <div class="row">
 
@@ -145,10 +143,16 @@
                         <label>Full Name</label>
 
                         <input
-                            type="text"
-                            name="name"
-                            placeholder="Enter your full name"
-                            required>
+    
+                        type="text"
+    
+                        id="name"
+    
+                        name="name"
+    
+                        placeholder="Enter your full name"
+    
+                        required>
 
                     </div>
 
@@ -157,12 +161,18 @@
                         <label>Mobile Number</label>
 
                         <input
-                            type="text"
-                            name="mobile"
-                            maxlength="10"
-                            placeholder="Enter mobile number"
-                            required>
-
+    
+                        type="text"
+    
+                        id="mobile"
+    
+                        name="mobile"
+    
+                        maxlength="10"
+    
+                        placeholder="Enter mobile number"
+    
+                        required>
                     </div>
 
                 </div>
@@ -175,6 +185,7 @@
 
                         <input
                             type="text"
+                            id="ward"
                             name="ward"
                             placeholder="Enter ward number"
                             required>
@@ -186,8 +197,12 @@
                         <label>Complaint Category</label>
 
                         <select
-                            name="category"
-                            required>
+    
+                        id="category"
+    
+                        name="category"
+    
+                        required>
 
                             <option value="">Select Category</option>
 
@@ -211,24 +226,58 @@
                     <label>Complaint Description</label>
 
                     <textarea
-                        name="description"
-                        rows="6"
-                        placeholder="Describe your complaint in detail..."
-                        required></textarea>
-
+    
+                    id="description"
+    
+                    name="description"
+    
+                    rows="6"
+    
+                    placeholder="Describe your complaint in detail..."
+    
+                    required></textarea>
                 </div>
 
                 <div class="row">
 
                     <div class="input-box">
 
-                        <label>Upload Supporting Image</label>
+                       <label>Upload Supporting Images</label>
 
-                        <input
-                            type="file"
-                            name="image"
-                            id="imageInput"
-                            accept="image/*">
+<div class="upload-box" id="uploadBox">
+
+    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+    <p>Drag & Drop Images Here</p>
+
+    <span>or</span>
+
+    <input
+        type="file"
+        id="images"
+        name="images"
+        accept=".jpg,.jpeg,.png,image/jpeg,image/png"
+        multiple
+        hidden>
+
+    <button
+        type="button"
+        id="chooseBtn">
+
+        Choose Images
+
+    </button>
+
+</div>
+
+<p class="upload-note">
+Maximum 5 Images (JPG, JPEG, PNG • Max 5 MB each)
+</p>
+
+
+                        <div id="preview-container"></div>
+
+                        
 
                     </div>
 
@@ -237,35 +286,29 @@
                         <label>Current Location</label>
 
                         <input
-                            type="text"
-                            name="location"
-                            id="location"
-                            placeholder="Enter your location">
+    
+                        type="text"
+   
+                        id="location"
+    
+                        name="location"
+    
+                        placeholder="Enter your location"
+
+                        >
 
                     </div>
 
                 </div>
 
-                <div class="preview-box">
-
-                    <img
-                        id="previewImage"
-                        src=""
-                        alt="Image Preview">
-
-                </div>
+                
 
                 <div class="button-group">
 
-                    <button
-                        type="button"
-                        id="locationBtn">
-
-                        <i class="fa-solid fa-location-dot"></i>
-
-                        Use My Location
-
-                    </button>
+                    <button type="button" id="detect-location">
+    <i class="fa-solid fa-location-dot"></i>
+    Detect My Current Location
+</button>
 
                     <button
                         type="submit"
@@ -284,7 +327,7 @@
         </div>
 
     </section>
-<script src="{% static 'css/complaint.js' %}"></script>
+<script src="{% static 'js/complaint.js' %}"></script>
 
 <footer class="footer">
 
@@ -389,6 +432,38 @@
     <i class="fa-solid fa-arrow-up"></i>
 
 </button>
+<script>
+const detectBtn = document.getElementById("detect-location");
+const locationInput = document.getElementById("location");
+
+detectBtn.addEventListener("click", function () {
+
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        async function(position) {
+
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`
+            );
+
+            const data = await response.json();
+
+            locationInput.value = data.display_name;
+        },
+
+        function(error) {
+            alert("Unable to detect location.");
+        }
+    );
+});
+</script>
 
 </body>
 
